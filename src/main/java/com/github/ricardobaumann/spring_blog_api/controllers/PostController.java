@@ -5,6 +5,7 @@ package com.github.ricardobaumann.spring_blog_api.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -24,7 +25,7 @@ import com.github.ricardobaumann.spring_blog_api.repositories.PostRepository;
  */
 @RestController
 @RequestMapping(path="/posts")
-public class PostController {
+public class PostController extends BaseController {
 
 	@Autowired
 	private PostRepository postRepository;
@@ -40,5 +41,7 @@ public class PostController {
 		post = postRepository.save(post);
 		return postHelper.toDTO(post);
 	}
+	
+	
 	
 }

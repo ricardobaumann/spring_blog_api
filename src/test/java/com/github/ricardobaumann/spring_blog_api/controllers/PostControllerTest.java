@@ -3,6 +3,7 @@ package com.github.ricardobaumann.spring_blog_api.controllers;
 import static org.junit.Assert.*;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -23,6 +24,14 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+
+import java.util.HashSet;
+import java.util.Set;
+
+import javax.validation.ConstraintViolation;
+import javax.validation.ConstraintViolationException;
+import javax.validation.ValidationException;
+
 import static org.hamcrest.Matchers.is;
 
 import com.github.ricardobaumann.spring_blog_api.Application;
@@ -64,14 +73,10 @@ public class PostControllerTest {
 		Long id = 1L;
 		
 		PostDTO postDTO = new PostDTO(category, title, content);
-		
-		PostDTO returnPostDTO = new PostDTO(id, category, title, content);
 	
 		Post post = new Post(category, title, content);
 		post.setId(id);
 		
-		when(postHelper.from(postDTO)).thenReturn(post);
-		when(postHelper.toDTO(post)).thenReturn(returnPostDTO);
 		when(postRepository.save(Mockito.<Post> any())).thenReturn(post);
 		
 		mockMvc.perform(post("/posts")
@@ -80,7 +85,22 @@ public class PostControllerTest {
 		.andExpect(status().isCreated())
 		.andExpect(jsonPath("$.id", is(id.intValue())));
 		
+	}
+	
+	@Test
+	public void testCreateValidationErrors() throws Exception {
 		
+		String message = "error";
+		ValidationException validationException = new ValidationException(new ValidationException(message));
+		
+		PostDTO postDTO = new PostDTO();
+		when(postRepository.save(Mockito.<Post> any())).thenThrow(validationException);
+		
+		mockMvc.perform(post("/posts")
+				.content(jsonHelper.objectToString(postDTO))
+				.contentType(MediaType.APPLICATION_JSON))
+		.andExpect(status().isUnprocessableEntity())
+		.andExpect(jsonPath("$.message", is(message)));
 		
 	}
 
