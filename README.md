@@ -8,5 +8,5 @@ The API should be entirely consumable through postman, that is no front end is r
 
 Stories breakdown
 1. As a user, I want to create my own posts. The post should contain a title (string, 100 characters maximum), content (string, 1000 characters maximum) and a category (string, 50 characters). All fields are required, and the post must be assigned to an id.
-2. As a user, I want to access a list of my posts, ordered from newest to oldest. The list should show the post title and category, with pagination. 
+2. As a user, I want to access a paginated list of my posts.
 3. As a user, I want to authenticate myself to have access to my posts, so no other user will be able to modify my content. 
