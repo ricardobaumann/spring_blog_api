@@ -14,6 +14,8 @@ import org.mockito.Spy;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.boot.test.WebIntegrationTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.TestContext;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -25,7 +27,9 @@ import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+import java.util.Arrays;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import javax.validation.ConstraintViolation;
@@ -102,6 +106,29 @@ public class PostControllerTest {
 		.andExpect(status().isUnprocessableEntity())
 		.andExpect(jsonPath("$.message", is(message)));
 		
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Test
+	public void testGetEmptyPage() throws Exception {
+		Page<Post> postPage = mock(Page.class);
+		when(postRepository.findAll(Mockito.<PageRequest> any())).thenReturn(postPage);
+		
+		mockMvc.perform(get("/posts")).andExpect(status().isOk()).andExpect(content().string("[]"));
+	}
+	
+	@Test
+	public void testGetFilledPage() throws Exception {
+		Page<Post> postPage = mock(Page.class);
+		String title = "title";
+		String category = "category";
+		String content = "content";
+		List<Post> postList = Arrays.asList(new Post(category, title, content));
+		when(postPage.getContent()).thenReturn(postList);
+		when(postRepository.findAll(Mockito.<PageRequest> any())).thenReturn(postPage);
+		
+		mockMvc.perform(get("/posts")).andExpect(status().isOk())
+		.andExpect(content().string(is(jsonHelper.objectToString(postList))));
 	}
 
 }

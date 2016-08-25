@@ -3,6 +3,8 @@
  */
 package com.github.ricardobaumann.spring_blog_api.dto;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+
 /**
  * @author ricardobaumann 
  * DTO to handle IO rest calls
@@ -15,6 +17,7 @@ public class PostDTO {
 
 	private String content;
 	
+	@JsonInclude(JsonInclude.Include.NON_NULL) 
 	private Long id;
 	
 	public PostDTO() {

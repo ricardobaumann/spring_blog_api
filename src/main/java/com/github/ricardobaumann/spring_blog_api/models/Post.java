@@ -11,6 +11,8 @@ import javax.persistence.Id;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+
 /**
  * Model entity for post data
  * @author ricardobaumann
@@ -21,6 +23,7 @@ public class Post {
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	@JsonInclude(JsonInclude.Include.NON_NULL) 
 	private Long id;
 	
 	@NotNull

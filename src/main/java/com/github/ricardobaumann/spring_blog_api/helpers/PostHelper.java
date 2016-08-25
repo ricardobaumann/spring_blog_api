@@ -3,6 +3,11 @@
  */
 package com.github.ricardobaumann.spring_blog_api.helpers;
 
+import java.util.LinkedList;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 
 import com.github.ricardobaumann.spring_blog_api.dto.PostDTO;
@@ -22,6 +27,10 @@ public class PostHelper {
 
 	public PostDTO toDTO(Post post) {
 		return new PostDTO(post.getId(),post.getCategory(), post.getTitle(), post.getContent());
+	}
+
+	public List<PostDTO> toDTOList(Page<Post> page) {
+		return page.getContent().stream().map(post -> toDTO(post)).collect(Collectors.toList());
 	}
 	
 }
