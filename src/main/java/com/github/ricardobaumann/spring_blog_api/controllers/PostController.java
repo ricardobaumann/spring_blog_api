@@ -3,6 +3,7 @@
  */
 package com.github.ricardobaumann.spring_blog_api.controllers;
 
+import java.security.Principal;
 import java.util.Collections;
 import java.util.List;
 
@@ -41,8 +42,11 @@ public class PostController extends BaseController {
 	@RequestMapping(method=RequestMethod.POST)
 	@ResponseStatus(code=HttpStatus.CREATED)
 	@ResponseBody
-	public PostDTO create(@RequestBody PostDTO postDTO) {
+	public PostDTO create(@RequestBody PostDTO postDTO, Principal user) {
 		Post post = postHelper.from(postDTO);
+		if (user!=null) {
+			post.setUsername(user.getName());
+		}
 		post = postRepository.save(post);
 		return postHelper.toDTO(post);
 	}

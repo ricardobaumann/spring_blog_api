@@ -11,6 +11,7 @@ import javax.persistence.Id;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 /**
@@ -37,6 +38,10 @@ public class Post {
 	@NotNull
 	@Size(max=1000)
 	private String content;
+	
+	@NotNull
+	@JsonIgnore
+	private String username;
 
 	public Post(String category, String title, String content) {
 		super();
@@ -78,6 +83,14 @@ public class Post {
 
 	public void setContent(String content) {
 		this.content = content;
+	}
+
+	public String getUsername() {
+		return username;
+	}
+
+	public void setUsername(String username) {
+		this.username = username;
 	}
 	
 }
