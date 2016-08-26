@@ -7,10 +7,14 @@ import java.security.Principal;
 import java.util.Collections;
 import java.util.List;
 
+import javax.websocket.server.PathParam;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -55,8 +59,19 @@ public class PostController extends BaseController {
 	public @ResponseBody List<PostDTO> getPage(
 			@RequestParam(name="page", required=false, defaultValue="0") Integer page, 
 			@RequestParam(name = "size", required=false, defaultValue="20") Integer size) {
-		return postHelper.toDTOList(postRepository.findAll(new PageRequest(page, size)));
+		
+		PageRequest pageRequest = new PageRequest(page, size, Direction.DESC, "id");
+		return postHelper.toDTOList(postRepository.findAll(pageRequest));
 	}
 	
+	@RequestMapping(method=RequestMethod.GET, path="{user}")
+	public @ResponseBody List<PostDTO> getUserPage(
+			@RequestParam(name="page", required=false, defaultValue="0") Integer page, 
+			@RequestParam(name = "size", required=false, defaultValue="20") Integer size,
+			@PathVariable("user") String user) {
+		
+		PageRequest pageRequest = new PageRequest(page, size, Direction.DESC, "id");
+		return postHelper.toDTOList(postRepository.findByUsername(user, pageRequest));  
+	}
 	
 }

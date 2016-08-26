@@ -53,7 +53,6 @@ import com.github.ricardobaumann.spring_blog_api.repositories.PostRepository;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = {Application.class, TestContext.class})
-@WebAppConfiguration
 public class PostControllerTest {
 	
 	@Mock
@@ -65,61 +64,17 @@ public class PostControllerTest {
 	@InjectMocks
 	private PostController postController;
 	
-	@Autowired
-	WebApplicationContext context;
-
-	@Autowired
-	private FilterChainProxy springSecurityFilterChain;
-	
 	private MockMvc mockMvc;
 	
 	@Autowired
 	private JsonHelper jsonHelper;
 
-	private String accessToken;
-
-	private MockMvc authMockMvc;
-
 	@Before
 	public void setUp() throws Exception {
 		MockitoAnnotations.initMocks(this);
 		mockMvc = MockMvcBuilders.standaloneSetup(postController).build();
-		authMockMvc = MockMvcBuilders.webAppContextSetup(context)
-				.addFilter(springSecurityFilterChain)
-				.build();
-		accessToken = getAccessToken("craig", "spring");
 	}
-	
-	private String getAccessToken(String username, String password) throws Exception {
-		String authorization = "Basic " + new String(Base64Utils.encode("clientapp:123456".getBytes()));
-		String contentType = MediaType.APPLICATION_JSON + ";charset=UTF-8";
 
-		// @formatter:off
-		String content = authMockMvc
-				.perform(
-						post("/oauth/token")
-								.header("Authorization", authorization)
-								.contentType(
-										MediaType.APPLICATION_FORM_URLENCODED)
-								.param("username", username)
-								.param("password", password)
-								.param("grant_type", "password")
-								.param("scope", "read write")
-								.param("client_id", "clientapp")
-								.param("client_secret", "123456"))
-				.andExpect(status().isOk())
-				.andExpect(content().contentType(contentType))
-				.andExpect(jsonPath("$.access_token", is(notNullValue())))
-				.andExpect(jsonPath("$.token_type", is(equalTo("bearer"))))
-				.andExpect(jsonPath("$.refresh_token", is(notNullValue())))
-				.andExpect(jsonPath("$.expires_in", is(greaterThan(4000))))
-				.andExpect(jsonPath("$.scope", is(equalTo("read write"))))
-				.andReturn().getResponse().getContentAsString();
-
-		// @formatter:on
-
-		return content.substring(17, 53);
-	}
 
 	@Test
 	public void testCreatePostSuccesfully() throws Exception {
@@ -137,11 +92,12 @@ public class PostControllerTest {
 		when(postRepository.save(Mockito.<Post> any())).thenReturn(post);
 		
 		mockMvc.perform(post("/posts")
-				.header("Authorization", String.format("Bearer %s", accessToken))
 				.content(jsonHelper.objectToString(postDTO))
 				.contentType(MediaType.APPLICATION_JSON))
 		.andExpect(status().isCreated())
 		.andExpect(jsonPath("$.id", is(id.intValue())));
+		
+		verify(postRepository).save(Mockito.<Post> any());
 		
 	}
 	
@@ -160,6 +116,8 @@ public class PostControllerTest {
 		.andExpect(status().isUnprocessableEntity())
 		.andExpect(jsonPath("$.message", is(message)));
 		
+		verify(postRepository).save(Mockito.<Post> any());
+		
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -169,8 +127,11 @@ public class PostControllerTest {
 		when(postRepository.findAll(Mockito.<PageRequest> any())).thenReturn(postPage);
 		
 		mockMvc.perform(get("/posts")).andExpect(status().isOk()).andExpect(content().string("[]"));
+		
+		verify(postRepository).findAll(Mockito.<PageRequest> any());
 	}
 	
+	@SuppressWarnings("unchecked")
 	@Test
 	public void testGetFilledPage() throws Exception {
 		Page<Post> postPage = mock(Page.class);
@@ -183,6 +144,27 @@ public class PostControllerTest {
 		
 		mockMvc.perform(get("/posts")).andExpect(status().isOk())
 		.andExpect(content().string(is(jsonHelper.objectToString(postList))));
+		
+		verify(postPage).getContent();
+		verify(postRepository).findAll(Mockito.<PageRequest> any());
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Test
+	public void testGetUserPage() throws Exception {
+		Page<Post> postPage = mock(Page.class);
+		String title = "title";
+		String category = "category";
+		String content = "content";
+		List<Post> postList = Arrays.asList(new Post(category, title, content));
+		when(postPage.getContent()).thenReturn(postList);
+		when(postRepository.findByUsername(Mockito.<String> any(), Mockito.<PageRequest> any())).thenReturn(postPage);
+		
+		mockMvc.perform(get("/posts/user")).andExpect(status().isOk())
+		.andExpect(content().string(is(jsonHelper.objectToString(postList))));
+		
+		verify(postPage).getContent();
+		verify(postRepository).findByUsername(Mockito.<String> any(), Mockito.<PageRequest> any());
 	}
 
 }
