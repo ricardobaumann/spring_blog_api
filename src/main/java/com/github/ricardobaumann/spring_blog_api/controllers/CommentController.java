@@ -18,10 +18,14 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.github.ricardobaumann.spring_blog_api.dto.CommentDTO;
+import com.github.ricardobaumann.spring_blog_api.exception.NotFoundException;
 import com.github.ricardobaumann.spring_blog_api.helpers.PostHelper;
 import com.github.ricardobaumann.spring_blog_api.models.Comment;
+import com.github.ricardobaumann.spring_blog_api.models.Post;
 import com.github.ricardobaumann.spring_blog_api.repositories.CommentRepository;
 import com.github.ricardobaumann.spring_blog_api.repositories.PostRepository;
+import com.github.ricardobaumann.spring_blog_api.services.CommentService;
+import com.github.ricardobaumann.spring_blog_api.services.PostService;
 
 /**
  * @author ricardobaumann
@@ -35,23 +39,40 @@ public class CommentController extends BaseController {
 	private PostHelper postHelper;
 	
 	@Autowired
-	private CommentRepository commentRepository;
+	private CommentService commentService;
 	
 	@Autowired
-	private PostRepository postRepository;
+	private PostService postService;
 	
 	@RequestMapping(method=RequestMethod.POST)
 	@ResponseStatus(code=HttpStatus.CREATED)
 	public @ResponseBody CommentDTO create(@RequestBody CommentDTO commentDTO, 
 			@PathVariable("post_id") Long postId, Principal user) {
 		Comment comment = postHelper.fromCommentDto(commentDTO);
-		comment.setPost(postRepository.findOne(postId));
+		comment.setPost(postService.find(postId));
 		if (user!=null) {
 			comment.setUsername(user.getName());
 		}
-		comment = commentRepository.save(comment);
+		comment = commentService.save(comment);
 		
 		return postHelper.toCommentDTO(comment);
+	}
+	
+	@RequestMapping(method=RequestMethod.DELETE, path="{comment_id}")
+	@ResponseStatus(code=HttpStatus.NO_CONTENT)
+	public void delete(@PathVariable("post_id") Long postId,
+			@PathVariable("comment_id") Long commentId,
+			Principal user) throws NotFoundException, UnauthorizedException {
+		
+		Post post = postService.find(postId);
+		if (post==null) {
+			throw new NotFoundException();
+		}
+		Comment comment = commentService.find(post, commentId);
+		if (comment==null) {
+			throw new NotFoundException();
+		}
+		commentService.delete(comment, user);
 	}
 	
 }

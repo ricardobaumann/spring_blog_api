@@ -56,6 +56,8 @@ import com.github.ricardobaumann.spring_blog_api.models.Comment;
 import com.github.ricardobaumann.spring_blog_api.models.Post;
 import com.github.ricardobaumann.spring_blog_api.repositories.CommentRepository;
 import com.github.ricardobaumann.spring_blog_api.repositories.PostRepository;
+import com.github.ricardobaumann.spring_blog_api.services.CommentService;
+import com.github.ricardobaumann.spring_blog_api.services.PostService;
 
 import static org.junit.Assert.fail;
 
@@ -74,10 +76,10 @@ public class CommentControllerTest {
 	private JsonHelper jsonHelper;
 	
 	@Mock
-	private CommentRepository commentRepository;
+	private CommentService commentService;
 	
 	@Mock
-	private PostRepository postRepository;
+	private PostService postService;
 	
 	@Spy
 	private PostHelper postHelper;
@@ -96,16 +98,16 @@ public class CommentControllerTest {
 	@Test
 	public void testCreateValidationError() throws Exception {
 		CommentDTO commentDTO = new CommentDTO();
-		when(postRepository.findOne(Mockito.<Long> any())).thenReturn(null);
-		when(commentRepository.save(Mockito.<Comment> any())).thenThrow(new ValidationException());
+		when(postService.find(Mockito.<Long> any())).thenReturn(null);
+		when(commentService.save(Mockito.<Comment> any())).thenThrow(new ValidationException());
 		
 		mockMvc.perform(post("/posts/{post_id}/comments", 1 )
 				.content(jsonHelper.objectToString(commentDTO))
 				.contentType(MediaType.APPLICATION_JSON))
 		.andExpect(status().isUnprocessableEntity());
 		
-		verify(postRepository).findOne(Mockito.<Long> any());
-		verify(commentRepository).save(Mockito.<Comment> any());
+		verify(postService).find(Mockito.<Long> any());
+		verify(commentService).save(Mockito.<Comment> any());
 	}
 
 	
@@ -126,9 +128,9 @@ public class CommentControllerTest {
 		Comment comment = new Comment(username , content);
 		comment.setId(commentId);
 		
-		when(postRepository.findOne(Mockito.<Long> any())).thenReturn(post);
+		when(postService.find(Mockito.<Long> any())).thenReturn(post);
 		
-		when(commentRepository.save(Mockito.<Comment> any())).thenReturn(comment);
+		when(commentService.save(Mockito.<Comment> any())).thenReturn(comment);
 		
 		mockMvc.perform(post("/posts/{post_id}/comments", postId )
 				.content(jsonHelper.objectToString(commentDTO))
@@ -136,8 +138,8 @@ public class CommentControllerTest {
 		.andExpect(status().isCreated())
 		.andExpect(jsonPath("$.id", is(commentId.intValue())));
 		
-		verify(postRepository).findOne(Mockito.<Long> any());
-		verify(commentRepository).save(Mockito.<Comment> any());
+		verify(postService).find(Mockito.<Long> any());
+		verify(commentService).save(Mockito.<Comment> any());
 		
 	}
 

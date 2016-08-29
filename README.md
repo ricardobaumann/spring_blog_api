@@ -12,5 +12,5 @@ Stories breakdown
 3. As a user, I want to authenticate myself to have access to my posts, so no other user will be able to modify my content. 
 5. As a user, I want to create comments on other posts
 5. As a non registered user, I want to have read-only access to another user's posts and comments.
-6. As a user, I want to be able to remove my own posts, and be to only on able to do it. 
+6. As a user, I want to be able to remove my own posts, and be the only on able to do it. 
 7. As a user, I want to remove comments from my posts, and be the only one able to do it. 

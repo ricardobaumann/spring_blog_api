@@ -34,7 +34,7 @@ public class PostService {
 	}
 
 	public void delete(Post post, Principal user) throws UnauthorizedException {
-		if (!post.getUsername().equals(user.getName())) {
+		if (user==null || !post.getUsername().equals(user.getName())) {
 			throw new UnauthorizedException();
 		}
 		postRepository.delete(post);
