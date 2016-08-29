@@ -52,16 +52,17 @@ import com.github.ricardobaumann.spring_blog_api.helpers.PostHelper;
 import com.github.ricardobaumann.spring_blog_api.models.Comment;
 import com.github.ricardobaumann.spring_blog_api.models.Post;
 import com.github.ricardobaumann.spring_blog_api.repositories.PostRepository;
+import com.github.ricardobaumann.spring_blog_api.services.PostService;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = {Application.class, TestContext.class})
 public class PostControllerTest {
 	
-	@Mock
-	private PostRepository postRepository;
-	
 	@Spy
 	private PostHelper postHelper;
+	
+	@Mock
+	private PostService postService;
 	
 	@InjectMocks
 	private PostController postController;
@@ -91,7 +92,7 @@ public class PostControllerTest {
 		Post post = new Post(category, title, content);
 		post.setId(id);
 		
-		when(postRepository.save(Mockito.<Post> any())).thenReturn(post);
+		when(postService.save(Mockito.<Post> any())).thenReturn(post);
 		
 		mockMvc.perform(post("/posts")
 				.content(jsonHelper.objectToString(postDTO))
@@ -99,7 +100,7 @@ public class PostControllerTest {
 		.andExpect(status().isCreated())
 		.andExpect(jsonPath("$.id", is(id.intValue())));
 		
-		verify(postRepository).save(Mockito.<Post> any());
+		verify(postService).save(Mockito.<Post> any());
 		
 	}
 	
@@ -110,7 +111,7 @@ public class PostControllerTest {
 		ValidationException validationException = new ValidationException(new ValidationException(message));
 		
 		PostDTO postDTO = new PostDTO();
-		when(postRepository.save(Mockito.<Post> any())).thenThrow(validationException);
+		when(postService.save(Mockito.<Post> any())).thenThrow(validationException);
 		
 		mockMvc.perform(post("/posts")
 				.content(jsonHelper.objectToString(postDTO))
@@ -118,7 +119,7 @@ public class PostControllerTest {
 		.andExpect(status().isUnprocessableEntity())
 		.andExpect(jsonPath("$.message", is(message)));
 		
-		verify(postRepository).save(Mockito.<Post> any());
+		verify(postService).save(Mockito.<Post> any());
 		
 	}
 	
@@ -126,11 +127,11 @@ public class PostControllerTest {
 	@Test
 	public void testGetEmptyPage() throws Exception {
 		Page<Post> postPage = mock(Page.class);
-		when(postRepository.findAll(Mockito.<PageRequest> any())).thenReturn(postPage);
+		when(postService.findPage(Mockito.<PageRequest> any())).thenReturn(postPage);
 		
 		mockMvc.perform(get("/posts")).andExpect(status().isOk()).andExpect(content().string("[]"));
 		
-		verify(postRepository).findAll(Mockito.<PageRequest> any());
+		verify(postService).findPage(Mockito.<PageRequest> any());
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -142,13 +143,13 @@ public class PostControllerTest {
 		String content = "content";
 		List<Post> postList = Arrays.asList(new Post(category, title, content));
 		when(postPage.getContent()).thenReturn(postList);
-		when(postRepository.findAll(Mockito.<PageRequest> any())).thenReturn(postPage);
+		when(postService.findPage(Mockito.<PageRequest> any())).thenReturn(postPage);
 		
 		mockMvc.perform(get("/posts")).andExpect(status().isOk())
 		.andExpect(content().string(is(jsonHelper.objectToString(postList))));
 		
 		verify(postPage).getContent();
-		verify(postRepository).findAll(Mockito.<PageRequest> any());
+		verify(postService).findPage(Mockito.<PageRequest> any());
 	}
 	
 	
@@ -161,13 +162,13 @@ public class PostControllerTest {
 		String content = "content";
 		List<Post> postList = Arrays.asList(new Post(category, title, content));
 		when(postPage.getContent()).thenReturn(postList);
-		when(postRepository.findByUsername(Mockito.<String> any(), Mockito.<PageRequest> any())).thenReturn(postPage);
+		when(postService.findByUsername(Mockito.<String> any(), Mockito.<PageRequest> any())).thenReturn(postPage);
 		
 		mockMvc.perform(get("/posts/users/user")).andExpect(status().isOk())
 		.andExpect(content().string(is(jsonHelper.objectToString(postList))));
 		
 		verify(postPage).getContent();
-		verify(postRepository).findByUsername(Mockito.<String> any(), Mockito.<PageRequest> any());
+		verify(postService).findByUsername(Mockito.<String> any(), Mockito.<PageRequest> any());
 	}
 	
 	@Test
@@ -181,7 +182,7 @@ public class PostControllerTest {
 		Post post = new Post(category, title, content);
 		post.setComments(Arrays.asList(new Comment(username, commentContent)));
 		
-		when(postRepository.findOne(Mockito.<Long> any())).thenReturn(post);
+		when(postService.find(Mockito.<Long> any())).thenReturn(post);
 		
 		mockMvc.perform(get("/posts/1")).andExpect(status().isOk())
 		.andExpect(jsonPath("$.title", is(title)))
@@ -190,13 +191,17 @@ public class PostControllerTest {
 		.andExpect(jsonPath("$.comments[0].username", is(username)))
 		.andExpect(jsonPath("$.comments[0].content", is(commentContent)));
 		
+		verify(postService).find(Mockito.<Long> any());
+		
 	}
 	
 	@Test
 	public void testGetInexistentPostByID() throws Exception {
-		when(postRepository.findOne(Mockito.<Long> any())).thenReturn(null);
+		when(postService.find(Mockito.<Long> any())).thenReturn(null);
 		
 		mockMvc.perform(get("/posts/1")).andExpect(status().isNotFound());
+		
+		verify(postService).find(Mockito.<Long> any());
 	}
 
 }

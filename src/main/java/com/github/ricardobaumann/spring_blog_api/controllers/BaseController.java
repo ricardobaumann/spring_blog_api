@@ -1,27 +1,17 @@
 package com.github.ricardobaumann.spring_blog_api.controllers;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import javax.servlet.http.HttpServletRequest;
 import javax.validation.ConstraintViolationException;
 import javax.validation.ValidationException;
 
 import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.TransactionSystemException;
-import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.context.request.WebRequest;
-import org.springframework.web.servlet.NoHandlerFoundException;
-import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
-import com.github.ricardobaumann.spring_blog_api.dto.NotFoundException;
+import com.github.ricardobaumann.spring_blog_api.exception.NotFoundException;
 
 @RestController
 public class BaseController {
@@ -45,6 +35,12 @@ public class BaseController {
 	@ResponseStatus(HttpStatus.NOT_FOUND)
 	@ExceptionHandler(NotFoundException.class)
 	public @ResponseBody Error handleNotFound(Throwable t) {
+		return null;
+	}
+	
+	@ResponseStatus(code=HttpStatus.UNAUTHORIZED)
+	@ExceptionHandler(UnauthorizedException.class)
+	public @ResponseBody Error handleUnauthorized(Throwable t) {
 		return null;
 	}
 

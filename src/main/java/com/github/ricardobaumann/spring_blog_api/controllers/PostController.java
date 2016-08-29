@@ -4,16 +4,12 @@
 package com.github.ricardobaumann.spring_blog_api.controllers;
 
 import java.security.Principal;
-import java.util.Collections;
 import java.util.List;
-
-import javax.websocket.server.PathParam;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,11 +20,12 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.github.ricardobaumann.spring_blog_api.dto.FullPostDTO;
-import com.github.ricardobaumann.spring_blog_api.dto.NotFoundException;
 import com.github.ricardobaumann.spring_blog_api.dto.PostDTO;
+import com.github.ricardobaumann.spring_blog_api.exception.NotFoundException;
 import com.github.ricardobaumann.spring_blog_api.helpers.PostHelper;
 import com.github.ricardobaumann.spring_blog_api.models.Post;
 import com.github.ricardobaumann.spring_blog_api.repositories.PostRepository;
+import com.github.ricardobaumann.spring_blog_api.services.PostService;
 
 /**
  * Rest controller service for posts
@@ -38,9 +35,9 @@ import com.github.ricardobaumann.spring_blog_api.repositories.PostRepository;
 @RestController
 @RequestMapping(path="/posts")
 public class PostController extends BaseController {
-
+	
 	@Autowired
-	private PostRepository postRepository;
+	private PostService postService;
 	
 	@Autowired
 	private PostHelper postHelper;
@@ -53,7 +50,7 @@ public class PostController extends BaseController {
 		if (user!=null) {
 			post.setUsername(user.getName());
 		}
-		post = postRepository.save(post);
+		post = postService.save(post);
 		return postHelper.toDTO(post);
 	}
 	
@@ -63,7 +60,7 @@ public class PostController extends BaseController {
 			@RequestParam(name = "size", required=false, defaultValue="20") Integer size) {
 		
 		PageRequest pageRequest = new PageRequest(page, size, Direction.DESC, "id");
-		return postHelper.toDTOList(postRepository.findAll(pageRequest));
+		return postHelper.toDTOList(postService.findPage(pageRequest));
 	}
 	
 	@RequestMapping(method=RequestMethod.GET, path="users/{user}")
@@ -73,17 +70,30 @@ public class PostController extends BaseController {
 			@PathVariable("user") String user) {
 		
 		PageRequest pageRequest = new PageRequest(page, size, Direction.DESC, "id");
-		return postHelper.toDTOList(postRepository.findByUsername(user, pageRequest));  
+		return postHelper.toDTOList(postService.findByUsername(user, pageRequest));  
 	}
+	
 	@RequestMapping(method=RequestMethod.GET, path = "{id}")
 	public @ResponseBody FullPostDTO getFullPost(@PathVariable("id") Long id) throws NotFoundException {
 		
-		Post post = postRepository.findOne(id);
+		Post post = loadPost(id);
+		
+		return postHelper.toFullDTO(post);
+	}
+	
+	private Post loadPost(Long id) throws NotFoundException {
+		Post post = postService.find(id);
 		if (post==null) {
 			throw new NotFoundException();
 		}
-		
-		return postHelper.toFullDTO(post);
+		return post;
+	}
+
+	@RequestMapping(method=RequestMethod.DELETE, path = "{id}")
+	@ResponseStatus(code=HttpStatus.NO_CONTENT)
+	public void remove(@PathVariable("id") Long id, Principal user) throws NotFoundException, UnauthorizedException {
+		Post post = loadPost(id);
+		postService.delete(post, user);
 	}
 	
 }

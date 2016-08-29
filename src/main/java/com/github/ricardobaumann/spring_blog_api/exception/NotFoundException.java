@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.github.ricardobaumann.spring_blog_api.dto;
+package com.github.ricardobaumann.spring_blog_api.exception;
 
 /**
  * @author ricardobaumann

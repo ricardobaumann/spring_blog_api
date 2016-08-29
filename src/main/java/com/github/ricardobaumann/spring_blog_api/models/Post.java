@@ -5,6 +5,7 @@ package com.github.ricardobaumann.spring_blog_api.models;
 
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -46,7 +47,7 @@ public class Post {
 	@JsonIgnore
 	private String username;
 	
-	@OneToMany
+	@OneToMany(cascade=CascadeType.REMOVE)
 	@JsonInclude(JsonInclude.Include.NON_NULL) 
 	private List<Comment> comments;
 
