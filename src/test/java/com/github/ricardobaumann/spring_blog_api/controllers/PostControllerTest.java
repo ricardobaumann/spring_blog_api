@@ -31,6 +31,7 @@ import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+import java.security.Principal;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
@@ -201,6 +202,29 @@ public class PostControllerTest {
 		
 		mockMvc.perform(get("/posts/1")).andExpect(status().isNotFound());
 		
+		verify(postService).find(Mockito.<Long> any());
+	}
+	
+	@Test
+	public void testDeleteExistentPostByID() throws Exception {
+		String title = "title";
+		String category = "category";
+		String content = "content";
+		
+		Post post = new Post(category, title, content);
+		when(postService.find(Mockito.<Long> any())).thenReturn(post);
+		doNothing().when(postService).delete(Mockito.<Post> any(), Mockito.<Principal> any());
+		
+		mockMvc.perform(delete("/posts/1")).andExpect(status().isNoContent());
+		
+		verify(postService).find(Mockito.<Long> any());
+		verify(postService).delete(Mockito.<Post> any(), Mockito.<Principal> any());
+	}
+	
+	@Test
+	public void testDeleteInexistentPostByID() throws Exception {
+		when(postService.find(Mockito.<Long> any())).thenReturn(null);
+		mockMvc.perform(delete("/posts/1")).andExpect(status().isNotFound());
 		verify(postService).find(Mockito.<Long> any());
 	}
 
