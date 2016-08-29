@@ -23,6 +23,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.github.ricardobaumann.spring_blog_api.dto.FullPostDTO;
+import com.github.ricardobaumann.spring_blog_api.dto.NotFoundException;
 import com.github.ricardobaumann.spring_blog_api.dto.PostDTO;
 import com.github.ricardobaumann.spring_blog_api.helpers.PostHelper;
 import com.github.ricardobaumann.spring_blog_api.models.Post;
@@ -64,7 +66,7 @@ public class PostController extends BaseController {
 		return postHelper.toDTOList(postRepository.findAll(pageRequest));
 	}
 	
-	@RequestMapping(method=RequestMethod.GET, path="{user}")
+	@RequestMapping(method=RequestMethod.GET, path="users/{user}")
 	public @ResponseBody List<PostDTO> getUserPage(
 			@RequestParam(name="page", required=false, defaultValue="0") Integer page, 
 			@RequestParam(name = "size", required=false, defaultValue="20") Integer size,
@@ -72,6 +74,16 @@ public class PostController extends BaseController {
 		
 		PageRequest pageRequest = new PageRequest(page, size, Direction.DESC, "id");
 		return postHelper.toDTOList(postRepository.findByUsername(user, pageRequest));  
+	}
+	@RequestMapping(method=RequestMethod.GET, path = "{id}")
+	public @ResponseBody FullPostDTO getFullPost(@PathVariable("id") Long id) throws NotFoundException {
+		
+		Post post = postRepository.findOne(id);
+		if (post==null) {
+			throw new NotFoundException();
+		}
+		
+		return postHelper.toFullDTO(post);
 	}
 	
 }

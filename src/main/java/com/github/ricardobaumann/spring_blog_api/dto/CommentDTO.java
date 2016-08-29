@@ -58,14 +58,14 @@ public class CommentDTO {
 
 	public CommentDTO() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
-	public CommentDTO(String username, Long id) {
+	public CommentDTO(String username, String content) {
 		super();
 		this.username = username;
-		this.id = id;
+		this.content = content;
 	}
+
 	
 	
 }

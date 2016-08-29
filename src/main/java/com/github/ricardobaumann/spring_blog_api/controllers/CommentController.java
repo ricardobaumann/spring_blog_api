@@ -18,8 +18,8 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.github.ricardobaumann.spring_blog_api.dto.CommentDTO;
+import com.github.ricardobaumann.spring_blog_api.helpers.PostHelper;
 import com.github.ricardobaumann.spring_blog_api.models.Comment;
-import com.github.ricardobaumann.spring_blog_api.models.CommentHelper;
 import com.github.ricardobaumann.spring_blog_api.repositories.CommentRepository;
 import com.github.ricardobaumann.spring_blog_api.repositories.PostRepository;
 
@@ -32,7 +32,7 @@ import com.github.ricardobaumann.spring_blog_api.repositories.PostRepository;
 public class CommentController extends BaseController {
 	
 	@Autowired
-	private CommentHelper commentHelper;
+	private PostHelper postHelper;
 	
 	@Autowired
 	private CommentRepository commentRepository;
@@ -44,14 +44,14 @@ public class CommentController extends BaseController {
 	@ResponseStatus(code=HttpStatus.CREATED)
 	public @ResponseBody CommentDTO create(@RequestBody CommentDTO commentDTO, 
 			@PathVariable("post_id") Long postId, Principal user) {
-		Comment comment = commentHelper.fromDto(commentDTO);
+		Comment comment = postHelper.fromCommentDto(commentDTO);
 		comment.setPost(postRepository.findOne(postId));
 		if (user!=null) {
 			comment.setUsername(user.getName());
 		}
 		comment = commentRepository.save(comment);
 		
-		return commentHelper.toDTO(comment);
+		return postHelper.toCommentDTO(comment);
 	}
 	
 }

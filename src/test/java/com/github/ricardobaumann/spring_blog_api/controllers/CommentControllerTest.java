@@ -53,7 +53,6 @@ import com.github.ricardobaumann.spring_blog_api.dto.CommentDTO;
 import com.github.ricardobaumann.spring_blog_api.dto.PostDTO;
 import com.github.ricardobaumann.spring_blog_api.helpers.PostHelper;
 import com.github.ricardobaumann.spring_blog_api.models.Comment;
-import com.github.ricardobaumann.spring_blog_api.models.CommentHelper;
 import com.github.ricardobaumann.spring_blog_api.models.Post;
 import com.github.ricardobaumann.spring_blog_api.repositories.CommentRepository;
 import com.github.ricardobaumann.spring_blog_api.repositories.PostRepository;
@@ -74,31 +73,44 @@ public class CommentControllerTest {
 	@Autowired
 	private JsonHelper jsonHelper;
 	
-	@Spy
-	private CommentHelper commentHelper;
-	
 	@Mock
 	private CommentRepository commentRepository;
 	
 	@Mock
 	private PostRepository postRepository;
 	
+	@Spy
+	private PostHelper postHelper;
+	
 	@InjectMocks
 	private CommentController commentController;
 
 	private MockMvc mockMvc;
-	/**
-	 * @throws java.lang.Exception
-	 */
+	
 	@Before
 	public void setUp() throws Exception {
 		MockitoAnnotations.initMocks(this);
 		mockMvc = MockMvcBuilders.standaloneSetup(commentController).build();
 	}
+	
+	@Test
+	public void testCreateValidationError() throws Exception {
+		CommentDTO commentDTO = new CommentDTO();
+		when(postRepository.findOne(Mockito.<Long> any())).thenReturn(null);
+		when(commentRepository.save(Mockito.<Comment> any())).thenThrow(new ValidationException());
+		
+		mockMvc.perform(post("/posts/{post_id}/comments", 1 )
+				.content(jsonHelper.objectToString(commentDTO))
+				.contentType(MediaType.APPLICATION_JSON))
+		.andExpect(status().isUnprocessableEntity());
+		
+		verify(postRepository).findOne(Mockito.<Long> any());
+		verify(commentRepository).save(Mockito.<Comment> any());
+	}
 
 	
 	@Test
-	public void testCreate() throws Exception {
+	public void testCreateSucessfully() throws Exception {
 		
 		String content = "content";
 		
@@ -109,18 +121,14 @@ public class CommentControllerTest {
 		Post post = new Post();
 		post.setId(postId);
 		
-		CommentDTO commentDTO = new CommentDTO(content,postId);
+		CommentDTO commentDTO = new CommentDTO(username,content);
 		
 		Comment comment = new Comment(username , content);
 		comment.setId(commentId);
 		
-		
-		
 		when(postRepository.findOne(Mockito.<Long> any())).thenReturn(post);
 		
 		when(commentRepository.save(Mockito.<Comment> any())).thenReturn(comment);
-		
-		
 		
 		mockMvc.perform(post("/posts/{post_id}/comments", postId )
 				.content(jsonHelper.objectToString(commentDTO))

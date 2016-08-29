@@ -46,8 +46,10 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 
 import com.github.ricardobaumann.spring_blog_api.Application;
+import com.github.ricardobaumann.spring_blog_api.dto.FullPostDTO;
 import com.github.ricardobaumann.spring_blog_api.dto.PostDTO;
 import com.github.ricardobaumann.spring_blog_api.helpers.PostHelper;
+import com.github.ricardobaumann.spring_blog_api.models.Comment;
 import com.github.ricardobaumann.spring_blog_api.models.Post;
 import com.github.ricardobaumann.spring_blog_api.repositories.PostRepository;
 
@@ -149,6 +151,7 @@ public class PostControllerTest {
 		verify(postRepository).findAll(Mockito.<PageRequest> any());
 	}
 	
+	
 	@SuppressWarnings("unchecked")
 	@Test
 	public void testGetUserPage() throws Exception {
@@ -160,11 +163,40 @@ public class PostControllerTest {
 		when(postPage.getContent()).thenReturn(postList);
 		when(postRepository.findByUsername(Mockito.<String> any(), Mockito.<PageRequest> any())).thenReturn(postPage);
 		
-		mockMvc.perform(get("/posts/user")).andExpect(status().isOk())
+		mockMvc.perform(get("/posts/users/user")).andExpect(status().isOk())
 		.andExpect(content().string(is(jsonHelper.objectToString(postList))));
 		
 		verify(postPage).getContent();
 		verify(postRepository).findByUsername(Mockito.<String> any(), Mockito.<PageRequest> any());
+	}
+	
+	@Test
+	public void testGetPostByIDSuccesfully() throws Exception {
+		String title = "title";
+		String category = "category";
+		String content = "content";
+		String username = "user";
+		String commentContent = "comment";
+		
+		Post post = new Post(category, title, content);
+		post.setComments(Arrays.asList(new Comment(username, commentContent)));
+		
+		when(postRepository.findOne(Mockito.<Long> any())).thenReturn(post);
+		
+		mockMvc.perform(get("/posts/1")).andExpect(status().isOk())
+		.andExpect(jsonPath("$.title", is(title)))
+		.andExpect(jsonPath("$.content", is(content)))
+		.andExpect(jsonPath("$.category", is(category)))
+		.andExpect(jsonPath("$.comments[0].username", is(username)))
+		.andExpect(jsonPath("$.comments[0].content", is(commentContent)));
+		
+	}
+	
+	@Test
+	public void testGetInexistentPostByID() throws Exception {
+		when(postRepository.findOne(Mockito.<Long> any())).thenReturn(null);
+		
+		mockMvc.perform(get("/posts/1")).andExpect(status().isNotFound());
 	}
 
 }

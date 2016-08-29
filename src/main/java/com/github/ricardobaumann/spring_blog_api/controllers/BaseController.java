@@ -21,6 +21,8 @@ import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.NoHandlerFoundException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+import com.github.ricardobaumann.spring_blog_api.dto.NotFoundException;
+
 @RestController
 public class BaseController {
 	
@@ -31,13 +33,19 @@ public class BaseController {
     		DataIntegrityViolationException.class,
     		TransactionSystemException.class}) 
     Error handleUnprocessableEntity(Throwable ex) {
-       return new Error(ex.getCause()!=null ? ex.getCause().getMessage() : ex.getMessage());
+       return new Error(ex.getCause()!=null ? ex.getCause().getMessage() : ex.getMessage());//TODO handle a better and understable message
     }
 	
 	@ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
 	@ExceptionHandler(Exception.class)
 	public @ResponseBody Error handleException(Throwable t) {
 		return new Error(t.getCause().getMessage());
+	}
+	
+	@ResponseStatus(HttpStatus.NOT_FOUND)
+	@ExceptionHandler(NotFoundException.class)
+	public @ResponseBody Error handleNotFound(Throwable t) {
+		return null;
 	}
 
 
