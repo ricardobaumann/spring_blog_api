@@ -34,6 +34,7 @@ import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+import java.security.Principal;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
@@ -110,6 +111,56 @@ public class CommentControllerTest {
 		verify(commentService).save(Mockito.<Comment> any());
 	}
 
+	@Test
+	public void testRemoveSuccesfully() throws Exception {
+		Post post = new Post();
+		when(postService.find(Mockito.<Long> any())).thenReturn(post);
+		Comment comment = new Comment();
+		comment.setPost(post);
+		when(commentService.find(Mockito.<Post> any(), Mockito.<Long> any())).thenReturn(comment);
+		doNothing().when(commentService).delete(Mockito.<Comment> any(), Mockito.<Principal> any());
+		
+		mockMvc.perform(delete("/posts/{post_id}/comments/{comment_id}", 1,1))
+		.andExpect(status().isNoContent());
+		
+		verify(postService).find(Mockito.<Long> any());
+		verify(commentService).find(Mockito.<Post> any(), Mockito.<Long> any());
+		verify(commentService).delete(Mockito.<Comment> any(), Mockito.<Principal> any());
+	}
+	
+	@Test
+	public void testRemoveInexistentComment() throws Exception {
+		Post post = new Post();
+		when(postService.find(Mockito.<Long> any())).thenReturn(post);
+		Comment comment = new Comment();
+		comment.setPost(post);
+		when(commentService.find(Mockito.<Post> any(), Mockito.<Long> any())).thenReturn(null);
+		//doNothing().when(commentService).delete(Mockito.<Comment> any(), Mockito.<Principal> any());
+		
+		mockMvc.perform(delete("/posts/{post_id}/comments/{comment_id}", 1,1))
+		.andExpect(status().isNotFound());
+		
+		verify(postService).find(Mockito.<Long> any());
+		verify(commentService).find(Mockito.<Post> any(), Mockito.<Long> any());
+		//verify(commentService).delete(Mockito.<Comment> any(), Mockito.<Principal> any());
+	}
+	
+	@Test
+	public void testRemoveCommentFromInexistentPost() throws Exception {
+		Post post = new Post();
+		when(postService.find(Mockito.<Long> any())).thenReturn(null);
+		Comment comment = new Comment();
+		comment.setPost(post);
+		//when(commentService.find(Mockito.<Post> any(), Mockito.<Long> any())).thenReturn(comment);
+		//doNothing().when(commentService).delete(Mockito.<Comment> any(), Mockito.<Principal> any());
+		
+		mockMvc.perform(delete("/posts/{post_id}/comments/{comment_id}", 1,1))
+		.andExpect(status().isNotFound());
+		
+		verify(postService).find(Mockito.<Long> any());
+		//verify(commentService).find(Mockito.<Post> any(), Mockito.<Long> any());
+		//verify(commentService).delete(Mockito.<Comment> any(), Mockito.<Principal> any());
+	}
 	
 	@Test
 	public void testCreateSucessfully() throws Exception {
