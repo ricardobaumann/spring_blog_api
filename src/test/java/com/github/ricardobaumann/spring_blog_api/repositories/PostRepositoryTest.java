@@ -75,7 +75,16 @@ public class PostRepositoryTest {
 		}
 	}
 	
-	
+	@Test
+	public void testSaveSuccesfully() {
+		String username = "user";
+		String content = "content";
+		String category = "category";
+		String title = "title";
+		Post post = new Post(category, title, content, username);
+		post = postRepository.save(post);
+		assertThat(post.getId(), is(4L));
+	}
 	
 	@Test
 	public void testFieldNullValidation() throws IllegalAccessException, InvocationTargetException {
