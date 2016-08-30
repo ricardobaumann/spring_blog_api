@@ -14,3 +14,10 @@ Stories breakdown
 5. As a non registered user, I want to have read-only access to another user's posts and comments.
 6. As a user, I want to be able to remove my own posts, and be the only on able to do it. 
 7. As a user, I want to remove comments from my posts, and be the only one able to do it. 
+
+
+Technical debt:
+1. Write unit tests for repositories
+2. Refactor controller tests, removing the Mockito any() calls
+3. Change database to postgresql
+4. Configure it on docker

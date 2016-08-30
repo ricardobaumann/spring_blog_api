@@ -45,6 +45,7 @@ public class Post {
 	
 	@NotNull
 	@JsonIgnore
+	@Size(max=50)
 	private String username;
 	
 	@OneToMany(cascade=CascadeType.REMOVE)
@@ -64,6 +65,14 @@ public class Post {
 		this.category = category;
 		this.title = title;
 		this.content = content;
+	}
+	
+	public Post(String category, String title, String content, String username) {
+		super();
+		this.category = category;
+		this.title = title;
+		this.content = content;
+		this.username = username;
 	}
 	
 	public Post() {
