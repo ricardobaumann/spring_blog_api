@@ -7,17 +7,25 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
-import com.github.ricardobaumann.spring_blog_api.controllers.UnauthorizedException;
+import com.github.ricardobaumann.spring_blog_api.exception.UnauthorizedException;
 import com.github.ricardobaumann.spring_blog_api.models.Post;
 import com.github.ricardobaumann.spring_blog_api.repositories.PostRepository;
 
+/**
+ * Service class for posts
+ * @author ricardobaumann
+ *
+ */
 @Service
 public class PostService {
 
 	@Autowired
 	private PostRepository postRepository;
 	
-	public Post save(Post post) {
+	public Post save(Post post) throws UnauthorizedException {
+		if (post.getUsername()==null) {
+			throw new UnauthorizedException();
+		}
 		return postRepository.save(post);
 	}
 

@@ -1,10 +1,8 @@
 package com.github.ricardobaumann.spring_blog_api.services;
 
-import static org.junit.Assert.*;
-
-import static org.mockito.Mockito.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import java.security.Principal;
 
@@ -21,7 +19,7 @@ import org.springframework.test.context.TestContext;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.github.ricardobaumann.spring_blog_api.Application;
-import com.github.ricardobaumann.spring_blog_api.controllers.UnauthorizedException;
+import com.github.ricardobaumann.spring_blog_api.exception.UnauthorizedException;
 import com.github.ricardobaumann.spring_blog_api.models.Comment;
 import com.github.ricardobaumann.spring_blog_api.models.Post;
 import com.github.ricardobaumann.spring_blog_api.repositories.CommentRepository;

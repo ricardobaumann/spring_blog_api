@@ -22,13 +22,13 @@ import org.springframework.web.bind.annotation.RestController;
 import com.github.ricardobaumann.spring_blog_api.dto.FullPostDTO;
 import com.github.ricardobaumann.spring_blog_api.dto.PostDTO;
 import com.github.ricardobaumann.spring_blog_api.exception.NotFoundException;
+import com.github.ricardobaumann.spring_blog_api.exception.UnauthorizedException;
 import com.github.ricardobaumann.spring_blog_api.helpers.PostHelper;
 import com.github.ricardobaumann.spring_blog_api.models.Post;
-import com.github.ricardobaumann.spring_blog_api.repositories.PostRepository;
 import com.github.ricardobaumann.spring_blog_api.services.PostService;
 
 /**
- * Rest controller service for posts
+ * Rest controller for posts
  * @author ricardobaumann
  *
  */
@@ -45,7 +45,7 @@ public class PostController extends BaseController {
 	@RequestMapping(method=RequestMethod.POST)
 	@ResponseStatus(code=HttpStatus.CREATED)
 	@ResponseBody
-	public PostDTO create(@RequestBody PostDTO postDTO, Principal user) {
+	public PostDTO create(@RequestBody PostDTO postDTO, Principal user) throws UnauthorizedException {
 		Post post = postHelper.from(postDTO);
 		if (user!=null) {
 			post.setUsername(user.getName());

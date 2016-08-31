@@ -5,8 +5,6 @@ package com.github.ricardobaumann.spring_blog_api.controllers;
 
 import java.security.Principal;
 
-import javax.websocket.server.PathParam;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,15 +17,15 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.github.ricardobaumann.spring_blog_api.dto.CommentDTO;
 import com.github.ricardobaumann.spring_blog_api.exception.NotFoundException;
+import com.github.ricardobaumann.spring_blog_api.exception.UnauthorizedException;
 import com.github.ricardobaumann.spring_blog_api.helpers.PostHelper;
 import com.github.ricardobaumann.spring_blog_api.models.Comment;
 import com.github.ricardobaumann.spring_blog_api.models.Post;
-import com.github.ricardobaumann.spring_blog_api.repositories.CommentRepository;
-import com.github.ricardobaumann.spring_blog_api.repositories.PostRepository;
 import com.github.ricardobaumann.spring_blog_api.services.CommentService;
 import com.github.ricardobaumann.spring_blog_api.services.PostService;
 
 /**
+ * Controller for comment endpoints
  * @author ricardobaumann
  *
  */

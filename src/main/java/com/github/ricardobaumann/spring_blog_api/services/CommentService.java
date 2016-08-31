@@ -5,11 +5,16 @@ import java.security.Principal;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.github.ricardobaumann.spring_blog_api.controllers.UnauthorizedException;
+import com.github.ricardobaumann.spring_blog_api.exception.UnauthorizedException;
 import com.github.ricardobaumann.spring_blog_api.models.Comment;
 import com.github.ricardobaumann.spring_blog_api.models.Post;
 import com.github.ricardobaumann.spring_blog_api.repositories.CommentRepository;
 
+/**
+ * Service class for comments
+ * @author ricardobaumann
+ *
+ */
 @Service
 public class CommentService {
 	

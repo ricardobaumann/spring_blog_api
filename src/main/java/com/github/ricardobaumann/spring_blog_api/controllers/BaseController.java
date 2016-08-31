@@ -12,7 +12,13 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.github.ricardobaumann.spring_blog_api.exception.NotFoundException;
+import com.github.ricardobaumann.spring_blog_api.exception.UnauthorizedException;
 
+/**
+ * Base class for application controller
+ * @author ricardobaumann
+ *
+ */
 @RestController
 public class BaseController {
 	

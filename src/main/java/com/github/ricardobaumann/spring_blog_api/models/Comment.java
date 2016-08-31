@@ -14,6 +14,7 @@ import javax.validation.constraints.Size;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 /**
+ * Comment entity database model
  * @author ricardobaumann
  *
  */

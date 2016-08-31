@@ -3,11 +3,9 @@
  */
 package com.github.ricardobaumann.spring_blog_api.helpers;
 
-import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 
@@ -18,7 +16,7 @@ import com.github.ricardobaumann.spring_blog_api.models.Comment;
 import com.github.ricardobaumann.spring_blog_api.models.Post;
 
 /**
- * Helpers for the rest controllers
+ * Helper for the rest controllers
  * @author ricardobaumann
  *
  */

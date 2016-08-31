@@ -4,6 +4,7 @@
 package com.github.ricardobaumann.spring_blog_api.exception;
 
 /**
+ * Exception class to handle NOT_FOUND status codes on endpoints
  * @author ricardobaumann
  *
  */

@@ -6,6 +6,7 @@ package com.github.ricardobaumann.spring_blog_api.dto;
 import java.util.List;
 
 /**
+ * DTO tp map a post with its full comments
  * @author ricardobaumann
  *
  */

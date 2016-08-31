@@ -1,10 +1,12 @@
-package com.github.ricardobaumann.spring_blog_api.controllers;
+package com.github.ricardobaumann.spring_blog_api.exception;
 
+/** 
+ * Exception class to map UNAUTHORIZED status codes on endpoints
+ * @author ricardobaumann
+ *
+ */
 public class UnauthorizedException extends Exception {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 
 	public UnauthorizedException() {

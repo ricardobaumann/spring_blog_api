@@ -6,8 +6,8 @@ package com.github.ricardobaumann.spring_blog_api.dto;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 /**
+ * DTO to handle post IO rest calls
  * @author ricardobaumann 
- * DTO to handle IO rest calls
  */
 public class PostDTO {
 
