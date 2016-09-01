@@ -11,7 +11,7 @@ This application was developed using spring-boot framework (http://projects.spri
 Steps to install and run the application. 
 * Git clone it
 * Install Java 8+ and Maven 3+
-* Setup a folder to host file upload: 
+* Setup a folder to host file upload. There is a file called <strong>application.properties</strong> on /src/main/resources folder. Change the <strong>root_upload_file_path</strong> attribute to the folder you want. 
 * Run <strong>mvn clean package install spring-boot:run</strong> on root folder
 * This application will be available on http://localhost:8080
 
