@@ -16,7 +16,7 @@ Steps to install and run the application.
 5. This application will be available on http://localhost:8080
 
 ## Usage
-1. With a running application, the first step is to authenticate:
+* With a running application, the first step is to authenticate:
 
 `curl -X POST -vu clientapp:123456 http://localhost:8080/oauth/token -H "Accept: application/json" -d "password=spring&username=roy&grant_type=password&scope=read%20write&client_secret=123456&client_id=clientapp"`
 
@@ -30,27 +30,27 @@ If the authentication was succesfull, you are going to receive something like th
   "scope": "read write"
 }`
 
-2. After authentication, you can create your posts. Posts creation requires authentication. 
+* After authentication, you can create your posts. Posts creation requires authentication. 
 
 `curl -X POST http://localhost:8080/posts -H "Accept: application/json" -H "Content-Type: application/json" -H "Accept: application/json" -H "Authorization: Bearer b98ed5b3-7c5f-4445-9298-74619824ca28" -d '{"title" : "title","category" : "category","content" : "content"}'`
 
-3. After that, you can navigate through your posts using pagination:
+* After that, you can navigate through your posts using pagination:
 
 `curl -H "Accept: application/json" -X GET http://localhost:8080/posts/users/roy?page=0&size=0`
 
-4. Or access a specific post through its id:
+* Or access a specific post through its id:
 
 `curl -H "Accept: application/json" -X GET http://localhost:8080/posts/1`
 
-5. You can add comments to any posts you want. If you send your authorization key, the comment will have your name on it. Otherwise, it will be anonymous. 
+* You can add comments to any posts you want. If you send your authorization key, the comment will have your name on it. Otherwise, it will be anonymous. 
 
 `curl -X POST http://localhost:8080/posts/1/comments -H "Accept: application/jAccept: application/json" -H "Authorization: Bearer b98ed5b3-7c5f-4445-9298-74619824ca28" -d '{"content" : "content"}'`
 
-6. You can also remove comments from YOUR posts, not from other user's posts
+* You can also remove comments from YOUR posts, not from other user's posts
 
 `curl -H "Authorization: Bearer b98ed5b3-7c5f-4445-9298-74619824ca28" -X DELETE http://localhost:8080/posts/1/comments/1`
 
-7. Files can also be added to posts, just like comments:
+* Files can also be added to posts, just like comments:
 
 `curl -i -X POST -F name=file -F file=@/tmp/file.txt http://localhost:8080/posts/1/files`
 `curl -i -X GET http://localhost:8080/posts/1/files/1`
