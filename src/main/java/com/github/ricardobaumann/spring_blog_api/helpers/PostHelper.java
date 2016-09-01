@@ -6,14 +6,17 @@ package com.github.ricardobaumann.spring_blog_api.helpers;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.apache.tomcat.util.http.fileupload.FileUpload;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 
+import com.github.ricardobaumann.spring_blog_api.controllers.FileUploadDTO;
 import com.github.ricardobaumann.spring_blog_api.dto.CommentDTO;
 import com.github.ricardobaumann.spring_blog_api.dto.FullPostDTO;
 import com.github.ricardobaumann.spring_blog_api.dto.PostDTO;
 import com.github.ricardobaumann.spring_blog_api.models.Comment;
 import com.github.ricardobaumann.spring_blog_api.models.Post;
+import com.github.ricardobaumann.spring_blog_api.models.PostFile;
 
 /**
  * Helper for the rest controllers
@@ -52,6 +55,10 @@ public class PostHelper {
 	
 	public Comment fromCommentDto(CommentDTO commentDTO) {
 		return new Comment(commentDTO.getUsername(), commentDTO.getContent());
+	}
+
+	public FileUploadDTO toFileDTO(PostFile postFile) {
+		return new FileUploadDTO(postFile.getId(), postFile.getFileName());
 	}
 	
 }

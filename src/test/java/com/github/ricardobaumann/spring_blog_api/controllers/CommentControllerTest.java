@@ -17,8 +17,6 @@ import java.security.Principal;
 import javax.validation.ValidationException;
 
 import org.junit.Before;
-import org.junit.Before;
-import org.junit.Test;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
