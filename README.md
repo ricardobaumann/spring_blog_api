@@ -11,8 +11,9 @@ This application was developed using spring-boot framework (http://projects.spri
 Steps to install and run the application. 
 1. Git clone it
 2. Install Java 8+ and Maven 3+
-3. Run <strong>clean package install spring-boot:run</strong> on root folder
-4. This application will be available on http://localhost:8080
+3. Setup a folder to host file upload: 
+4. Run <strong>clean package install spring-boot:run</strong> on root folder
+5. This application will be available on http://localhost:8080
 
 ## Usage
 1. With a running application, the first step is to authenticate:
@@ -49,3 +50,7 @@ If the authentication was succesfull, you are going to receive something like th
 
 `curl -H "Authorization: Bearer b98ed5b3-7c5f-4445-9298-74619824ca28" -X DELETE http://localhost:8080/posts/1/comments/1`
 
+7. Files can also be added to posts, just like comments:
+
+`curl -i -X POST -F name=file -F file=@/tmp/file.txt http://localhost:8080/posts/1/files`
+`curl -i -X GET http://localhost:8080/posts/1/files/1`

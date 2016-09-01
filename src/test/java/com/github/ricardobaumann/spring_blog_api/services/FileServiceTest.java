@@ -31,6 +31,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.github.ricardobaumann.spring_blog_api.Application;
+import com.github.ricardobaumann.spring_blog_api.Config;
 import com.github.ricardobaumann.spring_blog_api.models.Post;
 import com.github.ricardobaumann.spring_blog_api.models.PostFile;
 import com.github.ricardobaumann.spring_blog_api.repositories.PostFileRepository;
@@ -48,6 +49,9 @@ public class FileServiceTest {
 	
 	@Mock
 	private ResourceLoader resourceLoader;
+	
+	@Mock
+	private Config config;
 	
 	@Spy
 	@InjectMocks
@@ -113,7 +117,7 @@ public class FileServiceTest {
 		PostFile postFile = new PostFile(fileName, post);
 		
 		when(postFileRepository.findOne(fileId)).thenReturn(postFile);
-		
+		when(config.getRootUploadFilePath()).thenReturn("/tmp/");
 		Resource resource = Mockito.mock(Resource.class);
 		when(resourceLoader.getResource(Mockito.<String> any())).thenReturn(resource);
 		

@@ -11,6 +11,7 @@ import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.github.ricardobaumann.spring_blog_api.Config;
 import com.github.ricardobaumann.spring_blog_api.models.Post;
 import com.github.ricardobaumann.spring_blog_api.models.PostFile;
 import com.github.ricardobaumann.spring_blog_api.repositories.PostFileRepository;
@@ -23,7 +24,8 @@ import com.github.ricardobaumann.spring_blog_api.repositories.PostFileRepository
 @Service
 public class FileService {
 	
-	public static final String ROOT = "/tmp/files";
+	@Autowired
+	private Config config;
 	
 	@Autowired
 	private PostFileRepository postFileRepository;
@@ -51,7 +53,7 @@ public class FileService {
 	}
 
 	protected String getPostFileDir(PostFile postFile) {
-		return ROOT+File.separator+postFile.getId();
+		return config.getRootUploadFilePath()+File.separator+postFile.getId();
 	}
 
 	public Resource getFile(Long fileId) {
