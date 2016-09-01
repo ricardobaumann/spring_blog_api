@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.github.ricardobaumann.spring_blog_api.controllers;
+package com.github.ricardobaumann.spring_blog_api.dto;
 
 /**
  * DTO to map file uploads on rest controllers

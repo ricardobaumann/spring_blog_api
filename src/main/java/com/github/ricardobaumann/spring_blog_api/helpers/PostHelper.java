@@ -10,8 +10,8 @@ import org.apache.tomcat.util.http.fileupload.FileUpload;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 
-import com.github.ricardobaumann.spring_blog_api.controllers.FileUploadDTO;
 import com.github.ricardobaumann.spring_blog_api.dto.CommentDTO;
+import com.github.ricardobaumann.spring_blog_api.dto.FileUploadDTO;
 import com.github.ricardobaumann.spring_blog_api.dto.FullPostDTO;
 import com.github.ricardobaumann.spring_blog_api.dto.PostDTO;
 import com.github.ricardobaumann.spring_blog_api.models.Comment;
