@@ -53,4 +53,6 @@ If the authentication was succesfull, you are going to receive something like th
 * Files can also be added to posts, just like comments:
 
 `curl -i -X POST -F name=file -F file=@/tmp/file.txt http://localhost:8080/posts/1/files`
+
+
 `curl -i -X GET http://localhost:8080/posts/1/files/1`
