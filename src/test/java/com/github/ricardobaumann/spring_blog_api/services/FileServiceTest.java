@@ -44,6 +44,8 @@ import com.github.ricardobaumann.spring_blog_api.repositories.PostFileRepository
 @SpringApplicationConfiguration(classes = {Application.class, TestContext.class})
 public class FileServiceTest {
 	
+	private static final String ROOT_FILE_PATH = "/tmp/";  
+
 	@Mock
 	private PostFileRepository postFileRepository;
 	
@@ -63,6 +65,7 @@ public class FileServiceTest {
 	@Before
 	public void setUp() throws Exception {
 		MockitoAnnotations.initMocks(this);
+		when(config.getRootUploadFilePath()).thenReturn(ROOT_FILE_PATH);
 	}
 
 	@Test
@@ -81,6 +84,7 @@ public class FileServiceTest {
 		PostFile returnPostFile = fileService.createFile(file, post);
 		
 		assertThat(returnPostFile, is(postFile));
+		assertThat(returnPostFile.getFileName(), is(fileName));
 		
 		verify(postFileRepository).save(Mockito.<PostFile> any());
 		verify(fileService).copyFile(file, path);
@@ -117,7 +121,6 @@ public class FileServiceTest {
 		PostFile postFile = new PostFile(fileName, post);
 		
 		when(postFileRepository.findOne(fileId)).thenReturn(postFile);
-		when(config.getRootUploadFilePath()).thenReturn("/tmp/");
 		Resource resource = Mockito.mock(Resource.class);
 		when(resourceLoader.getResource(Mockito.<String> any())).thenReturn(resource);
 		
