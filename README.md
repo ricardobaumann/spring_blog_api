@@ -9,11 +9,11 @@ This application was developed using spring-boot framework (http://projects.spri
 
 ## Installation
 Steps to install and run the application. 
-1. Git clone it
-2. Install Java 8+ and Maven 3+
-3. Setup a folder to host file upload: 
-4. Run <strong>clean package install spring-boot:run</strong> on root folder
-5. This application will be available on http://localhost:8080
+* Git clone it
+* Install Java 8+ and Maven 3+
+* Setup a folder to host file upload: 
+* Run <strong>mvn clean package install spring-boot:run</strong> on root folder
+* This application will be available on http://localhost:8080
 
 ## Usage
 * With a running application, the first step is to authenticate:
