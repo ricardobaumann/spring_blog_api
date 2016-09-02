@@ -19,7 +19,7 @@ Steps to install and run the application.
 You can also run the application on a docker container:
 * Install docker
 * Build and run container image
-`docker build -t spring_blo_api . && docker run -t spring_blog_api`
+`docker build -t spring_blo_api . && docker run -p 8080:8080 -t spring_blog_api`
 
 ## Usage
 * With a running application, the first step is to authenticate:
