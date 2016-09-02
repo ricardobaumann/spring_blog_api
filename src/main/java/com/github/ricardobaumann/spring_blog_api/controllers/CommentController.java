@@ -31,7 +31,7 @@ import com.github.ricardobaumann.spring_blog_api.services.PostService;
  */
 @RestController
 @RequestMapping(path="/posts/{post_id}/comments")
-public class CommentController extends BaseController {
+public class CommentController{
 	
 	@Autowired
 	private PostHelper postHelper;

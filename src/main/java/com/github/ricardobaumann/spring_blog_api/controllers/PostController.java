@@ -34,7 +34,7 @@ import com.github.ricardobaumann.spring_blog_api.services.PostService;
  */
 @RestController
 @RequestMapping(path="/posts")
-public class PostController extends BaseController {
+public class PostController {
 	
 	@Autowired
 	private PostService postService;

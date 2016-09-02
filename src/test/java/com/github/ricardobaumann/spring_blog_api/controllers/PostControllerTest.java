@@ -60,11 +60,14 @@ public class PostControllerTest {
 	
 	@Autowired
 	private JsonHelper jsonHelper;
+	
+	@Autowired
+	private ExceptionMapper exceptionMapper;
 
 	@Before
 	public void setUp() throws Exception {
 		MockitoAnnotations.initMocks(this);
-		mockMvc = MockMvcBuilders.standaloneSetup(postController).build();
+		mockMvc = MockMvcBuilders.standaloneSetup(postController).setControllerAdvice(exceptionMapper).build();
 	}
 
 

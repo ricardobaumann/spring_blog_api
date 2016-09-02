@@ -62,13 +62,16 @@ public class CommentControllerTest {
 	
 	@InjectMocks
 	private CommentController commentController;
+	
+	@Autowired
+	private ExceptionMapper exceptionMapper;
 
 	private MockMvc mockMvc;
 	
 	@Before
 	public void setUp() throws Exception {
 		MockitoAnnotations.initMocks(this);
-		mockMvc = MockMvcBuilders.standaloneSetup(commentController).build();
+		mockMvc = MockMvcBuilders.standaloneSetup(commentController).setControllerAdvice(exceptionMapper).build();
 	}
 	
 	@Test

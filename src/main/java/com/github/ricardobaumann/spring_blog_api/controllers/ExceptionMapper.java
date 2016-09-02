@@ -1,3 +1,6 @@
+/**
+ * 
+ */
 package com.github.ricardobaumann.spring_blog_api.controllers;
 
 import javax.validation.ConstraintViolationException;
@@ -6,6 +9,7 @@ import javax.validation.ValidationException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.transaction.TransactionSystemException;
+import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -16,14 +20,13 @@ import com.github.ricardobaumann.spring_blog_api.exception.NotFoundException;
 import com.github.ricardobaumann.spring_blog_api.exception.UnauthorizedException;
 
 /**
- * Base class for application controller
  * @author ricardobaumann
  *
  */
 @RestController
-public class BaseController {
-	
-	
+@ControllerAdvice
+public class ExceptionMapper {
+
 	@ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)  
     @ExceptionHandler(value = {ValidationException.class, 
     		ConstraintViolationException.class, 
@@ -51,5 +54,5 @@ public class BaseController {
 		return null;
 	}
 
-
+	
 }
