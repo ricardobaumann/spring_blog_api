@@ -17,7 +17,7 @@ public class FullPostDTO extends PostDTO {
 	}
 
 	public FullPostDTO(Long id, String category, String title, String content) {
-		super(id, category, title, content);
+		super(category, title, content,id);
 	}
 
 	private List<CommentDTO> comments;

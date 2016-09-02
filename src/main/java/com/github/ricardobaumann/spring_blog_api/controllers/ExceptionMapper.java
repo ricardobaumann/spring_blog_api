@@ -32,7 +32,7 @@ public class ExceptionMapper {
     		ConstraintViolationException.class, 
     		DataIntegrityViolationException.class,
     		TransactionSystemException.class}) 
-    Error handleUnprocessableEntity(Throwable ex) {
+    public @ResponseBody Error handleUnprocessableEntity(Throwable ex) {
        return new Error(ex.getCause()!=null ? ex.getCause().getMessage() : ex.getMessage());//TODO handle a better and understable message
     }
 	

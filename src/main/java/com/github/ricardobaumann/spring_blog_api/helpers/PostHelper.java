@@ -32,7 +32,7 @@ public class PostHelper {
 	}
 
 	public PostDTO toDTO(Post post) {
-		return new PostDTO(post.getId(),post.getCategory(), post.getTitle(), post.getContent());
+		return new PostDTO(post.getCategory(), post.getTitle(), post.getContent(), post.getId());
 	}
 
 	public List<PostDTO> toDTOList(Page<Post> page) {
