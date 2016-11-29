@@ -4,6 +4,8 @@
 package com.github.ricardobaumann.spring_blog_api.controllers;
 
 import java.security.Principal;
+import java.util.Collections;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -71,6 +73,15 @@ public class CommentController{
 			throw new NotFoundException();
 		}
 		commentService.delete(comment, user);
+	}
+
+	@RequestMapping(method = RequestMethod.GET)
+	public List<Comment> getComments(@PathVariable("post_id") Long postId) {
+		Post post = postService.find(postId);
+		if (post==null) {
+			return Collections.emptyList();
+		}
+		return commentService.getComments(post);
 	}
 	
 }
