@@ -40,7 +40,6 @@ public class Comment {
 		super();
 		this.username = username;
 		this.content = content;
-		this.setPost(post);
 	}
 
 
