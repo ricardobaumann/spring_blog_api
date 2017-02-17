@@ -1,0 +1,16 @@
+language: java
+
+jdk:
+  - oraclejdk8
+sudo: false
+
+services:
+  - docker
+
+script: mvn clean package
+
+after_success:
+  - docker login -u="$dockerhub_username" -p="$dockerhub_password"
+  - docker build -t $TRAVIS_REPO_SLUG:$TRAVIS_BUILD_ID .
+  - docker tag $TRAVIS_REPO_SLUG:$TRAVIS_BUILD_ID $TRAVIS_REPO_SLUG:latest
+  - docker push $TRAVIS_REPO_SLUG
