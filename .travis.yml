@@ -9,5 +9,6 @@ services:
 script: mvn clean package
 
 after_success:
+  - docker login -u="ricardobaumann" -p="erenhub"
   - docker build -t ricardobaumann/spring_blog_api:latest .
   - docker push ricardobaumann/spring_blog_api:latest
