@@ -1,18 +1,11 @@
 package com.github.ricardobaumann.spring_blog_api.repositories;
 
-import static org.hamcrest.Matchers.contains;
-import static org.hamcrest.Matchers.hasProperty;
-import static org.hamcrest.Matchers.hasSize;
-import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.assertThat;
-
-import java.lang.reflect.InvocationTargetException;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
-
-import javax.validation.ConstraintViolationException;
-
+import com.github.ricardobaumann.spring_blog_api.Application;
+import com.github.ricardobaumann.spring_blog_api.models.Post;
+import com.github.springtestdbunit.DbUnitTestExecutionListener;
+import com.github.springtestdbunit.annotation.DatabaseOperation;
+import com.github.springtestdbunit.annotation.DatabaseSetup;
+import com.github.springtestdbunit.annotation.DatabaseTearDown;
 import org.apache.commons.beanutils.BeanUtils;
 import org.junit.Before;
 import org.junit.Rule;
@@ -20,7 +13,7 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.SpringApplicationConfiguration;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.test.annotation.DirtiesContext;
@@ -30,17 +23,19 @@ import org.springframework.test.context.support.DependencyInjectionTestExecution
 import org.springframework.test.context.support.DirtiesContextTestExecutionListener;
 import org.springframework.test.context.transaction.TransactionalTestExecutionListener;
 
-import com.github.ricardobaumann.spring_blog_api.Application;
-import com.github.ricardobaumann.spring_blog_api.models.Post;
-import com.github.springtestdbunit.DbUnitTestExecutionListener;
-import com.github.springtestdbunit.annotation.DatabaseOperation;
-import com.github.springtestdbunit.annotation.DatabaseSetup;
-import com.github.springtestdbunit.annotation.DatabaseTearDown;
+import javax.validation.ConstraintViolationException;
+import java.lang.reflect.InvocationTargetException;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
+
+import static org.hamcrest.Matchers.*;
+import static org.junit.Assert.assertThat;
 
 @TestExecutionListeners({DependencyInjectionTestExecutionListener.class, DirtiesContextTestExecutionListener.class,
 	  TransactionalTestExecutionListener.class, DbUnitTestExecutionListener.class})
 	@RunWith(SpringJUnit4ClassRunner.class)
-	@SpringApplicationConfiguration(classes = Application.class)
+	@SpringBootTest(classes = Application.class)
 	@DatabaseSetup(PostRepositoryTest.DATASET)
 	@DatabaseTearDown(type = DatabaseOperation.DELETE_ALL, value = { PostRepositoryTest.DATASET })
 	@DirtiesContext

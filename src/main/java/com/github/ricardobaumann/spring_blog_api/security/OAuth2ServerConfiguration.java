@@ -54,6 +54,8 @@ public class OAuth2ServerConfiguration {
 
 		@Override
 		public void configure(HttpSecurity http) throws Exception {
+
+
 			// @formatter:off
 			http
 				.authorizeRequests()

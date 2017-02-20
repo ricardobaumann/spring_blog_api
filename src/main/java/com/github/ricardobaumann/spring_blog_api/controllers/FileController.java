@@ -3,22 +3,6 @@
  */
 package com.github.ricardobaumann.spring_blog_api.controllers;
 
-import java.io.IOException;
-
-import org.hibernate.metamodel.ValidationException;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.Resource;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.multipart.MultipartFile;
-
 import com.github.ricardobaumann.spring_blog_api.dto.FileUploadDTO;
 import com.github.ricardobaumann.spring_blog_api.exception.NotFoundException;
 import com.github.ricardobaumann.spring_blog_api.helpers.PostHelper;
@@ -26,6 +10,15 @@ import com.github.ricardobaumann.spring_blog_api.models.Post;
 import com.github.ricardobaumann.spring_blog_api.models.PostFile;
 import com.github.ricardobaumann.spring_blog_api.services.FileService;
 import com.github.ricardobaumann.spring_blog_api.services.PostService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import javax.validation.ValidationException;
+import java.io.IOException;
 
 /**
  * Controller to upload and fetch files associated to posts

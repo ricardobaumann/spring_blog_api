@@ -1,47 +1,37 @@
 package com.github.ricardobaumann.spring_blog_api.services;
 
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.notNullValue;
-import static org.hamcrest.Matchers.nullValue;
-import static org.junit.Assert.assertThat;
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
-import java.io.IOException;
-import java.util.Collections;
-
-import javax.validation.ConstraintViolationException;
-
+import com.github.ricardobaumann.spring_blog_api.Application;
+import com.github.ricardobaumann.spring_blog_api.Config;
+import com.github.ricardobaumann.spring_blog_api.models.Post;
+import com.github.ricardobaumann.spring_blog_api.models.PostFile;
+import com.github.ricardobaumann.spring_blog_api.repositories.PostFileRepository;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.Mockito;
-import org.mockito.MockitoAnnotations;
-import org.mockito.Spy;
-import org.springframework.boot.test.SpringApplicationConfiguration;
+import org.mockito.*;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.test.context.TestContext;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.github.ricardobaumann.spring_blog_api.Application;
-import com.github.ricardobaumann.spring_blog_api.Config;
-import com.github.ricardobaumann.spring_blog_api.models.Post;
-import com.github.ricardobaumann.spring_blog_api.models.PostFile;
-import com.github.ricardobaumann.spring_blog_api.repositories.PostFileRepository;
+import javax.validation.ConstraintViolationException;
+import java.io.IOException;
+import java.util.Collections;
+
+import static org.hamcrest.Matchers.*;
+import static org.junit.Assert.assertThat;
+import static org.mockito.Mockito.*;
 
 /**
  * @author ricardobaumann
  *
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@SpringApplicationConfiguration(classes = {Application.class, TestContext.class})
+@SpringBootTest(classes = {Application.class, TestContext.class})
 public class FileServiceTest {
 	
 	private static final String ROOT_FILE_PATH = "/tmp/";  

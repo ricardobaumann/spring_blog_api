@@ -16,10 +16,9 @@
 
 package com.github.ricardobaumann.spring_blog_api.security;
 
-import org.springframework.boot.builder.SpringApplicationBuilder;
-import org.springframework.boot.context.web.SpringBootServletInitializer;
-
 import com.github.ricardobaumann.spring_blog_api.Application;
+import org.springframework.boot.builder.SpringApplicationBuilder;
+import org.springframework.boot.web.support.SpringBootServletInitializer;
 
 public class WebInitializer extends SpringBootServletInitializer {
 
